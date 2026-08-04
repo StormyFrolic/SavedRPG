@@ -56,13 +56,13 @@ export default function CharacterCreator() {
                 />
 
                 <Image className="absolute top-0 left-0" src={`/character${currentCharacter}shirt${currentShirt}.webp`}
-                    alt="character"
+                    alt="shirt"
                     width={256}
                     height={256}
                 />
 
-                <Image className="absolute top-0 left-0" src={`/character${currentCharacter}pants${currentShirt}.webp`}
-                    alt="character"
+                <Image className="absolute top-0 left-0" src={`/character${currentCharacter}pants${currentPants}.webp`}
+                    alt="pants"
                     width={256}
                     height={256}
                 />
