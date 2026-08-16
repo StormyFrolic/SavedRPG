@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image";
+import { motion, press } from "motion/react"
 import { useState } from "react";
 
 export default function CharacterCreator() {
@@ -47,32 +48,71 @@ export default function CharacterCreator() {
         <div>
             <div className="my-10 bg-white-500 h-60 relative inline-block">
 
+                <motion.div
+                    initial={{ x: -30, y: 0 }}
+                    animate={{ x: 0, y: 0 }}
+                    key={`${currentCharacter}character`}
+                    layout
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="" >
 
-                <Image className="block" src={`/character${currentCharacter}.webp`}
-                    alt="character"
-                    width={256}
-                    height={256}
+                    <Image className="block" src={`/character${currentCharacter}.webp`}
+                        alt="character"
+                        width={256}
+                        height={256}
 
-                />
+                    />
+                </motion.div>
 
-                <Image className="absolute top-0 left-0" src={`/character${currentCharacter}shirt${currentShirt}.webp`}
-                    alt="shirt"
-                    width={256}
-                    height={256}
-                />
+                <motion.div
+                    initial={{ x: -30, y: -256 }}
+                    animate={{ x: 0, y: -256 }}
+                    key={`${currentShirt}shirt`}
+                    layout
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="" >
+                    <Image className="absolute top-0 left-0" src={`/character${currentCharacter}shirt${currentShirt}.webp`}
+                        alt="shirt"
+                        width={256}
+                        height={256}
+                    />
+                </motion.div>
 
-                <Image className="absolute top-0 left-0" src={`/character${currentCharacter}pants${currentPants}.webp`}
-                    alt="pants"
-                    width={256}
-                    height={256}
-                />
+                <motion.div
+                    initial={{ x: -30, y: -256 }}
+                    animate={{ x: 0, y: -256 }}
+                    key={`${currentPants}Pants`}
+                    layout
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="" >
+                    <Image className="absolute top-0 left-0" src={`/character${currentCharacter}pants${currentPants}.webp`}
+                        alt="pants"
+                        width={256}
+                        height={256}
+                    />
+                </motion.div>
 
             </div>
 
             <div className="flex gap-3">
-                <button onClick={() => updateCharacter()}>Next Character</button>
-                <button onClick={() => updateShirt()}>Next Shirt</button>
-                <button onClick={() => updatePants()}>Next Pants</button>
+                <button className="outline p-2" onClick={() => updateCharacter()}>Next Character</button>
+                <button className="outline p-2" onClick={() => updateShirt()}>Next Shirt</button>
+                <button className="outline p-2" onClick={() => updatePants()}>Next Pants</button>
+            </div>
+
+            <div className="p-3">
+                <label>Name:</label>
+                <br></br>
+                <input className="bg-gray-900"></input>
+                <br></br>
+                <label>Class:</label>
+                <br></br>
+                <select className="bg-gray-900">
+                    <option>Archer</option>
+                    <option>Knight</option>
+                    <option>Mage</option>
+                </select>
+            
             </div>
 
         </div>
