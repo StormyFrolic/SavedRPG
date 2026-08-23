@@ -40,7 +40,7 @@ export default function Home() {
           >
             <Image
               className=""
-              src="/swordsprite.webp"
+              src="/startersword.webp"
               alt="sword sprite"
               width={48}
               height={48}

@@ -1,13 +1,16 @@
 "use client"
 import Image from "next/image";
 import { motion, press } from "motion/react"
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function CharacterCreator() {
 
     const characterCount = 2
     const shirtCount = 3
     const pantsCount = 3
+
+    const classRef = useRef(null)
+    const [classValue, setClassValue] = useState("bow")
 
     const [currentShirt, setCurrentShirt] = useState(1)
     const [currentPants, setCurrentPants] = useState(1)
@@ -39,6 +42,10 @@ export default function CharacterCreator() {
         } else {
             setCurrentPants(currentPants + 1)
         }
+    }
+
+    const updateClass = () => {
+        setClassValue(classRef.current.value)
     }
 
 
@@ -103,16 +110,30 @@ export default function CharacterCreator() {
             <div className="p-3">
                 <label>Name:</label>
                 <br></br>
-                <input className="bg-gray-900"></input>
+                <input className="bg-gray-900 my-1"></input>
                 <br></br>
-                <label>Class:</label>
+                <label className="">Class:</label>
                 <br></br>
-                <select className="bg-gray-900">
-                    <option>Archer</option>
-                    <option>Knight</option>
-                    <option>Mage</option>
+                <div className="flex">
+                <select ref={classRef} className="bg-gray-900 my-1 w-20 h-10" onChange={updateClass}>
+                    <option value="bow">Archer</option>
+                    <option value="sword">Knight</option>
+                    <option value="staff">Mage</option>
                 </select>
+                <Image src={`/starter${classValue}.webp`} alt="class weapon" width={128} height={128}/>
+                </div>
             
+                <br></br>
+                <br></br>
+
+                <label className="">Home:</label>
+                <br></br>
+                <select className="bg-gray-900 my-1 w-20">
+                    <option>Angelica</option>
+                    <option>Knogta</option>
+                    <option>Benthia</option>
+                </select>
+
             </div>
 
         </div>
