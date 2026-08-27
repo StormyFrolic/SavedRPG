@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import { motion, press } from "motion/react"
+import { motion } from "motion/react"
 import { useRef, useState } from "react";
 
 export default function CharacterCreator() {
@@ -10,12 +10,22 @@ export default function CharacterCreator() {
     const pantsCount = 3
 
     const classRef = useRef(null)
+    const nameRef = useRef(null)
+    const homeRef = useRef(null)
     const [classValue, setClassValue] = useState("bow")
 
     const [currentShirt, setCurrentShirt] = useState(1)
     const [currentPants, setCurrentPants] = useState(1)
     const [currentCharacter, setCurrentCharacter] = useState(1)
+    const [charcterName, setCharacterName] = useState("")
+    const [characterClass, setCharacterClass] = useState("")
+    const [characterHome, setCharacterHome] = useState("")
 
+    var playerCharacter = {}
+
+    const loadCharacter = () => {
+        playerCharacter = JSON.parse(localStorage.getItem("playerCharacter"))
+    }
 
     const updateCharacter = () => {
 
@@ -46,8 +56,16 @@ export default function CharacterCreator() {
 
     const updateClass = () => {
         setClassValue(classRef.current.value)
+        setCharacterClass(classRef.current.id)
     }
 
+    const updateName = () => {
+        setCharacterName(nameRef.current.value)
+    }
+
+    const updateHome = () => {
+        setCharacterHome(homeRef.current.id)
+    }
 
 
 
@@ -110,15 +128,15 @@ export default function CharacterCreator() {
             <div className="p-3">
                 <label>Name:</label>
                 <br></br>
-                <input className="bg-gray-900 my-1"></input>
+                <input className="bg-gray-900 my-1" onChange={updateName}></input>
                 <br></br>
                 <label className="">Class:</label>
                 <br></br>
                 <div className="flex">
                 <select ref={classRef} className="bg-gray-900 my-1 w-20 h-10" onChange={updateClass}>
-                    <option value="bow">Archer</option>
-                    <option value="sword">Knight</option>
-                    <option value="staff">Mage</option>
+                    <option value="bow" id="Archer">Archer</option>
+                    <option value="sword" id="Knight">Knight</option>
+                    <option value="staff" id="Mage">Mage</option>
                 </select>
                 <Image src={`/starter${classValue}.webp`} alt="class weapon" width={128} height={128}/>
                 </div>
@@ -128,7 +146,7 @@ export default function CharacterCreator() {
 
                 <label className="">Home:</label>
                 <br></br>
-                <select className="bg-gray-900 my-1 w-20">
+                <select className="bg-gray-900 my-1 w-20" onChange={updateHome}>
                     <option>Angelica</option>
                     <option>Knogta</option>
                     <option>Benthia</option>
