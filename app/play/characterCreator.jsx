@@ -3,6 +3,8 @@ import Image from "next/image";
 import { motion } from "motion/react"
 import { useRef, useState } from "react";
 
+import { splitter, stream } from "../Kokoro"
+
 export default function CharacterCreator() {
 
     const characterCount = 2
@@ -23,9 +25,34 @@ export default function CharacterCreator() {
 
     var playerCharacter = {}
 
+    const playTTS = async (text) => {
+
+        (async () => {
+            let i = 0;
+            for await (const { text, phonemes, audio } of stream) {
+                console.log({ text, phonemes });
+                //audio.save(`audio-${i++}.wav`);
+
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const source = audioContext.createBufferSource();
+                
+                source.connect(audioContext.destination);
+                source.start(); // Plays each chunk automatically
+            }
+        })();
+
+
+        const tokens = text.match(/\s*\S+/g);
+        for (const token of tokens) {
+            splitter.push(token);
+            await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+
+    }
+
     const loadCharacter = () => {
         playerCharacter = JSON.parse(localStorage.getItem("playerCharacter"))
-       
+
         setCurrentCharacter(playerCharacter.currentCharacter)
         setCurrentShirt(playerCharacter.currentShirt)
         setCurrentPants(playerCharacter.currentPants)
@@ -33,20 +60,23 @@ export default function CharacterCreator() {
         setCharacterName(playerCharacter.characterName)
         setCharacterHome(playerCharacter.characterHome)
         setClassValue(playerCharacter.weaponType)
+
+        playTTS(`The hero's name is: ${characterName}. Get back to saving the world!`)
     }
 
     const saveCharacter = () => {
         const characterData = {
-            currentShirt, 
+            currentShirt,
             currentPants,
             currentCharacter,
-            characterName, 
-            characterClass, 
+            characterName,
+            characterClass,
             characterHome,
-            "weaponType": classValue, 
+            "weaponType": classValue,
         }
-     
+
         localStorage.setItem("playerCharacter", JSON.stringify(characterData))
+        playTTS(`The hero's name is: ${characterName}. Are you ready to be saved? Where you're going. You're going to need it!`)
     }
 
     const updateCharacter = () => {
@@ -149,26 +179,26 @@ export default function CharacterCreator() {
             </div>
 
             <div className="flex gap-3 my-5">
-                 <button className="outline p-2 w-30" onClick={() => loadCharacter()}>Load Character</button>
-                 <button className="outline p-2 w-30" onClick={() => saveCharacter()}>Save Character</button>
+                <button className="outline p-2 w-30" onClick={() => loadCharacter()}>Load Character</button>
+                <button className="outline p-2 w-30" onClick={() => saveCharacter()}>Save Character</button>
             </div>
 
             <div className="p-3">
                 <label>Name:</label>
                 <br></br>
-                <input className="bg-gray-900 my-1"ref={nameRef} onChange={updateName}></input>
+                <input className="bg-gray-900 my-1" ref={nameRef} onChange={updateName}></input>
                 <br></br>
                 <label className="">Class:</label>
                 <br></br>
                 <div className="flex">
-                <select ref={classRef} className="bg-gray-900 my-1 w-20 h-10" onChange={updateClass}>
-                    <option value="bow">Archer</option>
-                    <option value="sword">Knight</option>
-                    <option value="staff">Mage</option>
-                </select>
-                <Image src={`/starter${classValue}.webp`} alt="class weapon" width={128} height={128}/>
+                    <select ref={classRef} className="bg-gray-900 my-1 w-20 h-10" onChange={updateClass}>
+                        <option value="bow">Archer</option>
+                        <option value="sword">Knight</option>
+                        <option value="staff">Mage</option>
+                    </select>
+                    <Image src={`/starter${classValue}.webp`} alt="class weapon" width={128} height={128} />
                 </div>
-            
+
                 <br></br>
                 <br></br>
 
