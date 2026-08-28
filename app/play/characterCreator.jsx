@@ -17,7 +17,7 @@ export default function CharacterCreator() {
     const [currentShirt, setCurrentShirt] = useState(1)
     const [currentPants, setCurrentPants] = useState(1)
     const [currentCharacter, setCurrentCharacter] = useState(1)
-    const [charcterName, setCharacterName] = useState("")
+    const [characterName, setCharacterName] = useState("")
     const [characterClass, setCharacterClass] = useState("")
     const [characterHome, setCharacterHome] = useState("")
 
@@ -25,6 +25,28 @@ export default function CharacterCreator() {
 
     const loadCharacter = () => {
         playerCharacter = JSON.parse(localStorage.getItem("playerCharacter"))
+       
+        setCurrentCharacter(playerCharacter.currentCharacter)
+        setCurrentShirt(playerCharacter.currentShirt)
+        setCurrentPants(playerCharacter.currentPants)
+        setCharacterClass(playerCharacter.characterClass)
+        setCharacterName(playerCharacter.characterName)
+        setCharacterHome(playerCharacter.characterHome)
+        setClassValue(playerCharacter.weaponType)
+    }
+
+    const saveCharacter = () => {
+        const characterData = {
+            currentShirt, 
+            currentPants,
+            currentCharacter,
+            characterName, 
+            characterClass, 
+            characterHome,
+            "weaponType": classValue, 
+        }
+     
+        localStorage.setItem("playerCharacter", JSON.stringify(characterData))
     }
 
     const updateCharacter = () => {
@@ -56,7 +78,8 @@ export default function CharacterCreator() {
 
     const updateClass = () => {
         setClassValue(classRef.current.value)
-        setCharacterClass(classRef.current.id)
+        setCharacterClass(classRef.current.options[classRef.current.selectedIndex].text)
+
     }
 
     const updateName = () => {
@@ -64,7 +87,7 @@ export default function CharacterCreator() {
     }
 
     const updateHome = () => {
-        setCharacterHome(homeRef.current.id)
+        setCharacterHome(homeRef.current.options[homeRef.current.selectedIndex].text)
     }
 
 
@@ -120,23 +143,28 @@ export default function CharacterCreator() {
             </div>
 
             <div className="flex gap-3">
-                <button className="outline p-2" onClick={() => updateCharacter()}>Next Character</button>
-                <button className="outline p-2" onClick={() => updateShirt()}>Next Shirt</button>
-                <button className="outline p-2" onClick={() => updatePants()}>Next Pants</button>
+                <button className="outline p-2 w-30" onClick={() => updateCharacter()}>Next Character</button>
+                <button className="outline p-2 w-30" onClick={() => updateShirt()}>Next Shirt</button>
+                <button className="outline p-2 w-30" onClick={() => updatePants()}>Next Pants</button>
+            </div>
+
+            <div className="flex gap-3 my-5">
+                 <button className="outline p-2 w-30" onClick={() => loadCharacter()}>Load Character</button>
+                 <button className="outline p-2 w-30" onClick={() => saveCharacter()}>Save Character</button>
             </div>
 
             <div className="p-3">
                 <label>Name:</label>
                 <br></br>
-                <input className="bg-gray-900 my-1" onChange={updateName}></input>
+                <input className="bg-gray-900 my-1"ref={nameRef} onChange={updateName}></input>
                 <br></br>
                 <label className="">Class:</label>
                 <br></br>
                 <div className="flex">
                 <select ref={classRef} className="bg-gray-900 my-1 w-20 h-10" onChange={updateClass}>
-                    <option value="bow" id="Archer">Archer</option>
-                    <option value="sword" id="Knight">Knight</option>
-                    <option value="staff" id="Mage">Mage</option>
+                    <option value="bow">Archer</option>
+                    <option value="sword">Knight</option>
+                    <option value="staff">Mage</option>
                 </select>
                 <Image src={`/starter${classValue}.webp`} alt="class weapon" width={128} height={128}/>
                 </div>
@@ -146,7 +174,7 @@ export default function CharacterCreator() {
 
                 <label className="">Home:</label>
                 <br></br>
-                <select className="bg-gray-900 my-1 w-20" onChange={updateHome}>
+                <select className="bg-gray-900 my-1 w-20" ref={homeRef} onChange={updateHome}>
                     <option>Angelica</option>
                     <option>Knogta</option>
                     <option>Benthia</option>
